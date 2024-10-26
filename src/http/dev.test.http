@@ -1,3 +1,16 @@
 ### 1. GET request 테스트
 GET http://localhost:8080/api/hello
 Accept: application/json
+
+### 2. POST 메모장 등록 테스트
+POST http://localhost:8080/api/memos
+Content-Type: application/json
+
+{
+  "username": "zian",
+  "contents": "POST 테스트 내용"
+}
+
+### 3. GET 메모장 조회 테스트
+GET http://localhost:8080/api/memos
+Accept: application/json
