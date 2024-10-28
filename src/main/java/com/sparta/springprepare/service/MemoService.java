@@ -28,7 +28,7 @@ public class MemoService {
     @Transactional(readOnly=true)
     public List<MemoResponseDto> getMemos(){
         //DB조회
-        return memoRepository.findAll().stream().map(MemoResponseDto::new).toList();
+        return memoRepository.findAllByOrderByModifiedAtDesc().stream().map(MemoResponseDto::new).toList();
     }
 
     @Transactional
