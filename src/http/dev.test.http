@@ -14,3 +14,7 @@ Content-Type: application/json
 ### 3. GET 메모장 조회 테스트
 GET http://localhost:8080/api/memos
 Accept: application/json
+
+### 4. 내용 조회 기능 테스트
+GET http://localhost:8080/api/memos/contents?keyword=나리
+Accept: application/json

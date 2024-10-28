@@ -34,4 +34,11 @@ public class MemoController {
     public Long deleteMemo(@PathVariable Long id) {
         return memoService.deleteMemo(id);
     }
+
+    @GetMapping("/memos/contents")
+    public List<MemoResponseDto> getMemosByKeyword(@RequestParam(required = false)String keyword){
+        //@RequestParam(required = false)은 생략가능
+        return memoService.getMemosByKeyword(keyword);
+    }
+
 }
