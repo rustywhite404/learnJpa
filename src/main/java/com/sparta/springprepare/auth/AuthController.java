@@ -1,9 +1,13 @@
 package com.sparta.springprepare.auth;
 
+import com.sparta.springprepare.entity.UserRoleEnum;
+import com.sparta.springprepare.jwt.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class AuthController {
 
+    private final JwtUtil jwtUtil;
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     @GetMapping("/create-cookie")
@@ -66,5 +73,50 @@ public class AuthController {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @GetMapping("/create-jwt")
+    public String createJwt(HttpServletResponse res) {
+        // Jwt 생성
+        String token = jwtUtil.createToken("Robbie", UserRoleEnum.USER);
+
+        // Jwt 쿠키 저장
+        jwtUtil.addJwtToCookie(token, res);
+
+        return "createJwt : " + token;
+    }
+
+    @GetMapping("/get-jwt")
+    public String getJwt(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue) {
+        // JWT 토큰 substring
+        String token = jwtUtil.substringToken(tokenValue);
+
+        // 토큰 검증
+        if(!jwtUtil.validateToken(token)){
+            throw new IllegalArgumentException("Token Error");
+        }
+
+        // 토큰에서 사용자 정보 가져오기
+        Claims info = jwtUtil.getUserInfoFromToken(token);
+        // 사용자 username
+        String username = info.getSubject();
+        System.out.println("username = " + username);
+        // 사용자 권한
+        String authority = (String) info.get(JwtUtil.AUTHORIZATION_KEY);
+        System.out.println("authority = " + authority);
+
+//        long exp = info.getExpiration();
+//        long iat = info.getIssuedAt();
+//
+//        Date expDate = new Date(exp * 1000);
+//        Date iatDate = new Date(iat * 1000);
+
+        Date exp = info.getExpiration();
+        Date iat = info.getIssuedAt();
+
+        System.out.println("Expiration Date: " + exp);
+        System.out.println("Issued At Date: " + iat);
+
+        return "getJwt : " + username + ", " + authority;
     }
 }
