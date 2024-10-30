@@ -1,6 +1,8 @@
 package com.sparta.springprepare.controller;
+import com.sparta.springprepare.dto.LoginRequestDto;
 import com.sparta.springprepare.dto.SignupRequestDto;
 import com.sparta.springprepare.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +30,16 @@ public class UserController {
     public String signup(@ModelAttribute SignupRequestDto signupRequestDto){
         userService.signup(signupRequestDto);
         return "redirect:/api/user/login-page";
+    }
+
+    @PostMapping("/user/login")
+    public String login(LoginRequestDto requestDto, HttpServletResponse res){
+        try {
+            userService.login(requestDto, res);
+        } catch (Exception e) {
+           return "redirect:/api/user/login-page?error";
+        }
+
+        return "redirect:/";
     }
 }
