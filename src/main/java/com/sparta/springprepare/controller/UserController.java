@@ -1,4 +1,5 @@
 package com.sparta.springprepare.controller;
+
 import com.sparta.springprepare.dto.LoginRequestDto;
 import com.sparta.springprepare.dto.SignupRequestDto;
 import com.sparta.springprepare.service.UserService;
@@ -31,7 +32,6 @@ public class UserController {
         userService.signup(signupRequestDto);
         return "redirect:/api/user/login-page";
     }
-
     @PostMapping("/user/login")
     public String login(LoginRequestDto requestDto, HttpServletResponse res){
         try {
