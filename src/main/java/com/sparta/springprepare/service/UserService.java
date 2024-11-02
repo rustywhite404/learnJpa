@@ -1,12 +1,10 @@
 package com.sparta.springprepare.service;
 
-import com.sparta.springprepare.dto.LoginRequestDto;
 import com.sparta.springprepare.dto.SignupRequestDto;
 import com.sparta.springprepare.entity.User;
 import com.sparta.springprepare.entity.UserRoleEnum;
 import com.sparta.springprepare.jwt.JwtUtil;
 import com.sparta.springprepare.repository.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -56,20 +54,20 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
-        String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
-        //사용자 확인(Optional로 안 받고 User로 받을거라서 없는 경우 orElseThrow로 에러 반환 처리
-        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException("등록된 사용자가 없습니다."));
-
-        //비밀번호 확인
-        if(!passwordEncoder.matches(password, user.getPassword())){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        //JWT 생성 및 쿠키에 저장 후 response 객체에 추가
-        String token = jwtUtil.createToken(user.getUsername(),user.getRole());
-        jwtUtil.addJwtToCookie(token,res);
-
-    }
+//    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
+//        String username = requestDto.getUsername();
+//        String password = requestDto.getPassword();
+//        //사용자 확인(Optional로 안 받고 User로 받을거라서 없는 경우 orElseThrow로 에러 반환 처리
+//        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException("등록된 사용자가 없습니다."));
+//
+//        //비밀번호 확인
+//        if(!passwordEncoder.matches(password, user.getPassword())){
+//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+//        }
+//
+//        //JWT 생성 및 쿠키에 저장 후 response 객체에 추가
+//        String token = jwtUtil.createToken(user.getUsername(),user.getRole());
+//        jwtUtil.addJwtToCookie(token,res);
+//
+//    }
 }
