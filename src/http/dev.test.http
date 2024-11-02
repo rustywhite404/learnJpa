@@ -18,3 +18,19 @@ Accept: application/json
 ### 4. 내용 조회 기능 테스트
 GET http://localhost:8080/api/memos/contents?keyword=나리
 Accept: application/json
+
+### 5. validation 테스트
+POST http://localhost:8080/api/validation
+Content-Type: application/json
+Cookie: Authorization=Bearer%20eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ6aWFuIiwiYXV0aCI6IkFETUlOIiwiZXhwIjoxNzMwNTUyODkyLCJpYXQiOjE3MzA1NDkyOTJ9.3PykBKNETOjmd4cj-bzUZlbI_UCsZmUh-Opiz2WSvAo
+
+{
+  "name" : "Robbie",
+  "email" : "Robbie@gmail.com",
+  "price" : 1234,
+  "discount" : -1234,
+  "link" : "54321",
+  "max" : 10,
+  "min" : 2
+}
+
